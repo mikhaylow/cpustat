@@ -7,6 +7,7 @@ import (
 	"strconv"
 	"strings"
 	"time"
+	"log"
 )
 
 const cpu_freq_path = "/sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq"
@@ -16,14 +17,16 @@ func main() {
 		for {
 			data, err := os.ReadFile(cpu_freq_path)
 			if err != nil {
-				panic(err)
+				log.Fatal(err)
+				return
 			}
 
 			str_trim := strings.TrimSpace(string(data))
 
 			freq, err := strconv.ParseFloat(str_trim, 64)
 			if err != nil {
-				panic(err)
+				log.Fatal(err)
+				return
 			}
 
 			fmt.Printf("cpu_freq: %.1f\n", freq/1000.0)
